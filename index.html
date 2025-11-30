@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐, 李朝祎!</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS 样式开始 */
+        
+        /* 1. 整体页面设置 */
+        body {
+            font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+            margin: 0;
+            overflow: hidden; /* 隐藏滚动条 */
+            
+            /* 漂亮的动画渐变背景 */
+            background: linear-gradient(135deg, #ffc3a0, #ffafbd, #a0c4ff, #b2fefa);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        /* 2. 背景渐变动画 */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 3. "点击开始" 遮罩层 */
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* 半透明黑 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* 保持在最上层 */
+            transition: opacity 0.5s ease;
+        }
+
+        #start-button {
+            font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+            font-size: 2rem;
+            padding: 20px 40px;
+            background-color: #ff69b4; /* 亮粉色 */
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        /* 按钮跳动动画 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 4. 主要内容容器 (贺卡) */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 5. 生日贺卡 */
+        .birthday-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 30px 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            /* 默认隐藏，通过JS添加 'show' 类来显示 */
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        
+        .birthday-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 6. 小猪图片样式 */
+        .pig-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border: 6px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 7. 标题 "生日快乐" */
+        h1 {
+            font-size: 2.8rem; /* 调整大小以适应名字 */
+            color: #e91e63;
+            margin: 10px 0;
+            animation: textGlow 2s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff7ac6, 0 0 30px #ff7ac6; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #f7c6e0, 0 0 40px #f7c6e0; }
+        }
+
+        /* 8. 祝福语 */
+        p {
+            font-size: 1.25rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 9. 蛋糕图片 */
+        .cake-image {
+            width: 80px; /* 蛋糕小一点 */
+            margin-top: 20px;
+        }
+
+        /* 10. 彩带容器 */
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 让鼠标可以点击到下面的内容 */
+            z-index: 1000;
+        }
+
+        /* 11. 单个彩带样式 */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            opacity: 0.9;
+            animation: fall 7s linear infinite;
+        }
+
+        /* 12. 彩带飘落动画 */
+        @keyframes fall {
+            from {
+                transform: translateY(-10vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
+        
+        /* CSS 样式结束 */
+    </style>
+</head>
+<body>
+    
+    <div id="start-overlay">
+        <button id="start-button">🎉 点击开启生日惊喜 🎉</button>
+    </div>
+
+    <div id="confetti-container"></div>
+    
+    <div class="main-container">
+        <div class="birthday-card" id="card">
+            
+            <img src="pig.jpg" alt="可爱的小猪" class="pig-image">
+            
+            <h1>生日快乐，李朝祎！</h1>
+            
+            <p>
+                祝你今天充满阳光、欢笑和爱！<br>
+                希望你所有的愿望都能实现。
+            </p>
+            
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAF9ElEQVR4Xu2de2wUVRzHP/feuyVAEaKoExExajRiVILREJMYT/pARCA+qFGjiPEHhER/UINfVEzUBxIRRS9gTCQ+iA+CiI/GaIgPBCXGgxJtNFEEqYGID4wGEdPZ3TPHzrZ3u7Nn7vbuvXt3s+wnd7Nnz8x8vvud3Z05swOEQkF+4AV8BbgCuA24B/gRuA6YBDwNnANsAQYDLwK7gU3Aq8BFwNfAzxOAG4FXgRPASeA9oB/oAbYBZwF/A0cDnwLHAf8CngcGAE8B+4CbgP+Bx4HPgUeAB4AngCNAA3AlMAw4CzgN+BL4Cfgf+AL4DHgQ+AhYBSwClgJNAAeBq4CvgO+A3wCPAR8BTgBOAQ0AlwC7gD8A7wNvAZ8BTgBOAY0ANwK7gE8APwJeA74CnACcAhgArAQWAksBTYAzwHXA18B3wG8AjwEfAU4ATgGMAF4CjgP+BFYAPwL/A18AjwEfAU4ATgGMAD4GbgD+AbwHvAV8BTgBOAUwAhgJLAWWAg0AZ4DrgK+B74DfAB4DPgKcAJwCGAG8BBwH/AjsBv4H/ge+A5wBPgKcAJoCDADmAg8AFwC/AR4DfgKcAJwCmAEsAJYCSwFmgBOA9cBXwP/AawDPgI+A5wAnAIYAbykBnqO4r+i6RPeSgNsA/wNOA3YBVwFHAQ8CRwE3Ai8CJwAvgZuAGYC9wK/AY8A3gBeA44ATgGMANwGPAH8CTgFuAv4AvgNeAJ4AzgBOAIwA3gSOA/4GNgK/A/8DPwEeAU4ATgGMAD4GTgH+AV4DXgO+A5wAnAIYAWwElgJLAY0AZ4DrgK+B74DfAB4DPgKcA5wAGAG8BBwH/AjsBv4H/ge+AZwBPgKcAJwCGAHsBA4AfgO8BXwHvAY4ATgFMABYCSwGlgKbAc8B1wFfA98BvAI8BHwFOAE4BjABeAo4D/gRWAj8D/wNfA48AHwFOAI4BjAB+A+4AvgNeA74DnACcAhgBrASWAktBTYAzwHXA18B3wG8AjwEfAU4ATgGMAD4GjgP+BWYAfwP/A18BjwBPAU4AjgD2AAYAfwG+A3wHvAY4ATgFMAJYCiyFWrJm3T/S8+XNqNPS91H0A5CqBwCXAP+BuYCvwM+ATwAfAI8AHwFOAI4BjAA+A04BfgO8B3wFOAE4BTAGWAmshBYCTQA3gcuAr4HvgN8AHgM+ApwAnAIYAbwEHAf8CWwG/gf+B74DPAE8BTgBOAQwANgJHAD8BfgO8BrwGOAE4BTAAWAlsBRYCmgBPA9cBXwP/AbwGPAJ8BTgBOAUwAngJOA74GdgK/A/8D3wNPAJ8BTgBOAUwAPgZuAP4BXgN+ApwAnAKYASwElgKLAVaM2l3oOiR3M9C0O8APgc+Ax4AvgKcABwBGAE8BZwG/AbsBP4H/ge+Ah4BvgKcABwBGAHsAwwA/gJ8B/wGeA14AnAKYASwElgJLAb6AycA7wDXAV8B3wG/ATwGfAU4ATgGMAB4CjgP+BOYAfwN/A98BzwCfAU4ATgGMAHYBxgA/Af4DfAa8BjgBOAUwAFgJLIWaM6iYQv4GtgJvA2cBNwOvAccB9wJLAaeAU4AnAEeATwAvAEcAjgAuAv4Cfgd8BfgL+A7wGuANwAvgZOBE4GfgfOA34EfgP+BFYD/wK/A08CbwHPAi8DbwLvAw8BzwEPAS8BTwCPAKcAFwHXAJsA+YD7wH/Ay8DlwEfAI8BFwG3ADcArQCnAIcBZwCHAOccBdwHHAUcBPwHHAUcBTwFHAUcA3geuA6YCVwLXA9sAtYDmwHNgKbAc2AqsA+YBtwHbAH2AzsAGYBW4CNwGbAWuA8YC9wCvAO8AhwCvAOcARwHHAXcC/wBHAX8DjwF+AP4DvAH8BngL+A9wHPAb8C/gd+A/4D/gV+A5YBPwN/A18A/wK/AbsCTgN/BDwM/Aw8CTwGPAQ8BLwEPAI8AjwCnAFcAVwDbAcuAI4BjgB+A/gOuA/wKXAUsAlwCbgAmAjsBF4BbgBuANwBXAXcBNwE/AQsBCYDjwJnAWcBRwJnAQcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIcBVwHXAWcBZwCvAIcBZwCvAIcBZwCvAIcBZwCvAIKCoq7AByAzy7U4L2MvAAAAAElFTkSuQmCC" alt="生日蛋糕" class="cake-image">
+            
+        </div>
+    </div>
+    
+    <audio id="birthday-song" src="birthday-music.mp3" loop></audio>
+
+    
+    <script>
+        // 等待页面内容加载完毕
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 获取需要操作的元素
+            const overlay = document.getElementById('start-overlay');
+            const startButton = document.getElementById('start-button');
+            const audio = document.getElementById('birthday-song');
+            const card = document.getElementById('card');
+            const confettiContainer = document.getElementById('confetti-container');
+
+            // 彩带的颜色
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800'];
+
+            // 点击按钮时的操作
+            startButton.addEventListener('click', () => {
+                
+                // 1. 隐藏遮罩层
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500); // 0.5秒淡出后彻底移除
+
+                // 2. 播放音乐
+                audio.play();
+                
+                // 3. 显示生日贺卡 (通过添加 .show 类触发CSS过渡)
+                card.classList.add('show');
+                
+                // 4. 开始撒彩带
+                launchConfetti();
+            });
+
+            // 创建单个彩带
+            function createConfettiPiece() {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                confetti.style.left = Math.random() * 100 + 'vw'; // 随机水平位置
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]; // 随机颜色
+                confetti.style.animationDuration = (Math.random() * 3 + 4) + 's'; // 随机下落时间 (4-7秒)
+                confetti.style.opacity = Math.random(); // 随机透明度
+                
+                // 随机旋转和形状 (简单模拟)
+                if (Math.random() > 0.5) {
+                    confetti.style.width = '15px';
+                } else {
+                    confetti.style.height = '15px';
+                    confetti.style.width = '15px';
+                }
+                
+                confettiContainer.appendChild(confetti);
+                
+                // 8秒后移除彩带元素，防止页面卡顿
+                setTimeout(() => {
+                    confetti.remove();
+                }, 8000);
+            }
+
+            // 持续撒彩带
+            function launchConfetti() {
+                setInterval(createConfettiPiece, 200); // 每0.2秒创建一个
+            }
+
+        });
+    </script>
+    </body>
+</html>
